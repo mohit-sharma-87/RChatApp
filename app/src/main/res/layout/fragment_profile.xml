@@ -39,8 +39,8 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_login"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"

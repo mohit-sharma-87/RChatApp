@@ -25,6 +25,9 @@ class HomeViewModel(private val realmSync: App) : ViewModel() {
         true
     }
 
+    private val _loadingBar: MutableLiveData<Boolean> = MutableLiveData(false)
+    val loadingBar: LiveData<Boolean> = _loadingBar
+
     init {
         _currentUser.value = realmSync.currentUser()
     }
