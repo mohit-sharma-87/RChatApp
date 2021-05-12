@@ -17,5 +17,7 @@
 
     <string name="profile_username">Display Name</string>
     <string name="profile_update_label">Save</string>
+    <string name="profile_share_location_label">Share Location</string>
+    <string name="profile_on_line_reminder_label">On-line reminder</string>
 
 </resources>
