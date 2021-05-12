@@ -34,11 +34,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
-
         homeViewModel.isLoggedIn.observe(viewLifecycleOwner) {
             if (!it)
                 openLogin()
