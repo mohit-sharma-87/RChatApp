@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_login -> hideBottomNav()
-                else -> showBottomNav()
+                R.id.navigation_home -> showBottomNav()
+                R.id.navigation_profile -> showBottomNav()
+                else -> hideBottomNav()
             }
         }
 

@@ -37,7 +37,7 @@ class RChatApplication : Application() {
 
     private fun setupKoin() {
         startKoin {
-            androidLogger(Level.DEBUG)
+            androidLogger(Level.NONE)
             androidContext(this@RChatApplication)
             modules(modules = koinModules())
         }

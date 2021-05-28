@@ -9,7 +9,7 @@ import android.view.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.mongodb.rchatapp.R
-import com.mongodb.rchatapp.ui.data.model.ProfileNavigation
+import com.mongodb.rchatapp.ui.data.ProfileNavigation
 
 
 class ProfileFragment : Fragment() {
@@ -35,7 +35,7 @@ class ProfileFragment : Fragment() {
 
         viewModel.navigation.observe(viewLifecycleOwner) {
             when (it) {
-                ProfileNavigation.goToHome -> {
+                ProfileNavigation.GoToHome -> {
                     findNavController().navigate(R.id.go_to_home)
                 }
             }
@@ -48,6 +48,11 @@ class ProfileFragment : Fragment() {
         _binding.btUpdate.setOnClickListener {
             viewModel.updateDisplayName(_binding.inputUsername.text.toString())
         }
+
+        viewModel.userName.observe(viewLifecycleOwner) {
+            _binding.inputUsername.setText(it)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

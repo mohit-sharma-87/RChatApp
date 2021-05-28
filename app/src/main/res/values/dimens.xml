@@ -16,5 +16,6 @@
     <dimen name="s_36">36dp</dimen>
     <dimen name="s_48">48dp</dimen>
     <dimen name="s_64">64dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>

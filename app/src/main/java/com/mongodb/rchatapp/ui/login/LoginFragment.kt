@@ -58,16 +58,14 @@ class LoginFragment : Fragment() {
             }
         })
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner, Observer { loginResult ->
-            loginResult ?: return@Observer
+        loginViewModel.loginResult.observe(viewLifecycleOwner) { loginResult ->
             loadingProgressBar.visibility = View.GONE
             if (loginResult) {
-                updateUiWithUser()
+                findNavController().navigateUp()
             } else {
                 showLoginFailed(R.string.login_failed)
             }
-        })
-
+        }
 
         val afterTextChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -117,10 +115,6 @@ class LoginFragment : Fragment() {
         binding.tvRegister.setOnClickListener {
             loginViewModel.onRegistrationClicked()
         }
-    }
-
-    private fun updateUiWithUser() {
-        findNavController().navigate(R.id.go_to_profile)
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

@@ -7,7 +7,7 @@
     android:padding="@dimen/s_8">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ic_chat_icon"
+        android:id="@+id/ic_member_icon"
         android:layout_width="@dimen/s_48"
         android:layout_height="@dimen/s_48"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/s_8"
-        app:layout_constraintStart_toEndOf="@id/ic_chat_icon"
+        app:layout_constraintStart_toEndOf="@id/ic_member_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Chat Title" />
 
@@ -38,9 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/s_8"
         android:layout_marginEnd="@dimen/s_8"
-        app:layout_constraintBottom_toBottomOf="@+id/ic_chat_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/ic_member_icon"
         app:layout_constraintEnd_toStartOf="@id/tv_chat_unread_count"
-        app:layout_constraintStart_toEndOf="@id/ic_chat_icon"
+        app:layout_constraintStart_toEndOf="@id/ic_member_icon"
         app:layout_constraintTop_toBottomOf="@+id/tv_chat_title"
         tools:text="Chat Message" />
 
@@ -54,14 +54,13 @@
         tools:text="10" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/appCompatTextView"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/s_8"
         android:layout_marginTop="@dimen/s_8"
         android:background="@color/shade_grey"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ic_chat_icon"
+        app:layout_constraintStart_toEndOf="@id/ic_member_icon"
         app:layout_constraintTop_toBottomOf="@id/tv_chat_last_msg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

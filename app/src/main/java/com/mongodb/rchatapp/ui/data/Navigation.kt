@@ -1,4 +1,4 @@
-package com.mongodb.rchatapp.ui.data.model
+package com.mongodb.rchatapp.ui.data
 
 sealed class LoginNavigation {
     object goToHome : LoginNavigation()
@@ -7,7 +7,7 @@ sealed class LoginNavigation {
 
 
 sealed class ProfileNavigation {
-    object goToHome : ProfileNavigation()
+    object GoToHome : ProfileNavigation()
 }
 
 

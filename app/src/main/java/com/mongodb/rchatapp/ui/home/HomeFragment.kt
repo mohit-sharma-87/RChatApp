@@ -1,5 +1,6 @@
 package com.mongodb.rchatapp.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +19,13 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModel()
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        lifecycle.addObserver(homeViewModel)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +42,14 @@ class HomeFragment : Fragment() {
         homeViewModel.isLoggedIn.observe(viewLifecycleOwner) {
             if (!it)
                 openLogin()
+        }
+
+        homeViewModel.chatList.observe(viewLifecycleOwner) {
+
+        }
+
+        binding.fabNewChat.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.goToChatMemberList())
         }
     }
 
