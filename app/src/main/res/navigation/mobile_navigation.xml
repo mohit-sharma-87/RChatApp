@@ -45,7 +45,7 @@
     <fragment
         android:id="@+id/chatMemberList"
         android:name="com.mongodb.rchatapp.ui.chatmembers.ChatMemberListFragment"
-        android:label="ChatMemberList"
+        android:label="@string/title_new_chat"
         tools:layout="@layout/fragment_member_list" />
 
 </navigation>

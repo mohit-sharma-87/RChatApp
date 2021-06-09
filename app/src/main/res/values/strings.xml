@@ -3,6 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Profile</string>
     <string name="title_login">Login</string>
+    <string name="title_new_chat">Create Chat Room</string>
 
 
     <!-- Strings related to login -->
@@ -19,5 +20,8 @@
     <string name="profile_update_label">Save</string>
     <string name="profile_share_location_label">Share Location</string>
     <string name="profile_on_line_reminder_label">On-line reminder</string>
+
+    <string name="prompt_chat_room">Enter Chat Room Name</string>
+    <string name="label_member">Select Chat Members </string>
 
 </resources>

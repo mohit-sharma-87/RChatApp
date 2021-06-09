@@ -18,6 +18,28 @@ open class Chatster(
     var userName: String = ""
 ) : RealmObject() {}
 
+fun Chatster.toListViewModel(): ChatsterListViewModel {
+    return ChatsterListViewModel(
+        this._id,
+        this.avatarImage,
+        this.displayName,
+        this.lastSeenAt,
+        this.presence,
+        this.userName,
+        false
+    )
+}
+
+data class ChatsterListViewModel(
+    var _id: String = "",
+    var avatarImage: Photo? = null,
+    var displayName: String? = null,
+    var lastSeenAt: Date? = null,
+    var presence: String = "",
+    var userName: String = "",
+    var isSelected: Boolean = false
+)
+
 open class User(
     @PrimaryKey var _id: String = "",
     var conversations: RealmList<Conversation> = RealmList(),
