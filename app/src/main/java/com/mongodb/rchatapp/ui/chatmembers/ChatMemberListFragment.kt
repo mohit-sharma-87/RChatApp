@@ -32,6 +32,10 @@ class ChatMemberListFragment : Fragment() {
             adapter = ChatMemberViewAdapter()
         }
 
+        viewModel.loadingBar.observe(viewLifecycleOwner) {
+            binding.loading.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
         viewModel.members.observe(viewLifecycleOwner) {
             val adapter = binding.rvMemberList.adapter as ChatMemberViewAdapter
             adapter.updateMemberList(it)
