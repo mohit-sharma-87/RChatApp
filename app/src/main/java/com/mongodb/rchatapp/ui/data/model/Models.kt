@@ -52,15 +52,15 @@ open class User(
 
 @RealmClass(embedded = true)
 open class Conversation(
+    var id: String = UUID.randomUUID().toString(),
     var displayName: String = "",
-    var id: String = "",
     var members: RealmList<Member> = RealmList(),
     var unreadCount: Long = 0
 ) : RealmObject() {}
 
 @RealmClass(embedded = true)
 open class Member(
-    var membershipStatus: String = "",
+    var membershipStatus: String = "User added, but invite pending",
     var userName: String = ""
 ) : RealmObject() {}
 
