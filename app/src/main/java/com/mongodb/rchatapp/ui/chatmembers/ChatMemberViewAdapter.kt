@@ -11,7 +11,7 @@ import java.util.ArrayList
 
 class ChatMemberViewAdapter : RecyclerView.Adapter<ChatMemberViewAdapter.ViewHolder>() {
 
-    private var values: MutableList<ChatsterListViewModel> = ArrayList()
+    var values: MutableList<ChatsterListViewModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
