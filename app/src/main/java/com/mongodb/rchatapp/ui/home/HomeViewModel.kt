@@ -1,6 +1,7 @@
 package com.mongodb.rchatapp.ui.home
 
 import androidx.lifecycle.*
+import com.mongodb.rchatapp.ui.data.HomeNavigation
 import com.mongodb.rchatapp.ui.data.model.Conversation
 import com.mongodb.rchatapp.ui.data.model.User
 import io.realm.Realm
@@ -30,6 +31,9 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
 
     private val _chatList: MutableLiveData<List<Conversation>> = MutableLiveData()
     val chatList: LiveData<List<Conversation>> = _chatList
+
+    private val _navigation: MutableLiveData<HomeNavigation> = MutableLiveData()
+    val navigation: LiveData<HomeNavigation> = _navigation
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
