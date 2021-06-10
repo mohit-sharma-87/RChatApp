@@ -2,8 +2,8 @@ package com.mongodb.rchatapp.ui.home
 
 import androidx.lifecycle.*
 import com.mongodb.rchatapp.ui.data.HomeNavigation
-import com.mongodb.rchatapp.ui.data.model.Conversation
-import com.mongodb.rchatapp.ui.data.model.User
+import com.mongodb.rchatapp.ui.data.Conversation
+import com.mongodb.rchatapp.ui.data.User
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App

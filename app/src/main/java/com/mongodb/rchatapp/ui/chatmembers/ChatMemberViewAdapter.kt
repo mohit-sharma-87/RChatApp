@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mongodb.rchatapp.databinding.ItemMemberBinding
-import com.mongodb.rchatapp.ui.data.model.ChatsterListViewModel
+import com.mongodb.rchatapp.ui.data.ChatsterListViewModel
 import java.util.ArrayList
 
 class ChatMemberViewAdapter : RecyclerView.Adapter<ChatMemberViewAdapter.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.mongodb.rchatapp.ui.data.model
+package com.mongodb.rchatapp.ui.data
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

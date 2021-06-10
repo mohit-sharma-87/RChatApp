@@ -1,7 +1,7 @@
 package com.mongodb.rchatapp.ui.chatmembers
 
 import androidx.recyclerview.widget.DiffUtil
-import com.mongodb.rchatapp.ui.data.model.ChatsterListViewModel
+import com.mongodb.rchatapp.ui.data.ChatsterListViewModel
 
 class ChatMemberListDiffCallback(
     private val oldList: List<ChatsterListViewModel>,

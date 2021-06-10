@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ProfileNavigation
-import com.mongodb.rchatapp.ui.data.model.User
+import com.mongodb.rchatapp.ui.data.User
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.CreateNewChatNavigation
-import com.mongodb.rchatapp.ui.data.model.*
+import com.mongodb.rchatapp.ui.data.*
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
