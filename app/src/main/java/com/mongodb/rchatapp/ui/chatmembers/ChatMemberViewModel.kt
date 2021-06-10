@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.mongodb.rchatapp.ui.data.model.Chatster
-import com.mongodb.rchatapp.ui.data.model.ChatsterListViewModel
-import com.mongodb.rchatapp.ui.data.model.toListViewModel
+import com.mongodb.rchatapp.ui.data.CreateNewChatNavigation
+import com.mongodb.rchatapp.ui.data.model.*
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.kotlin.where
 import io.realm.mongodb.App
 import io.realm.mongodb.sync.SyncConfiguration
@@ -21,6 +21,9 @@ class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
 
     private val _loadingBar: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingBar: LiveData<Boolean> = _loadingBar
+
+    private val _navigation = MutableLiveData<CreateNewChatNavigation>()
+    val navigation: LiveData<CreateNewChatNavigation> = _navigation
 
     init {
         getMemberList()
@@ -47,4 +50,39 @@ class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
         })
     }
 
+    fun createChatRoom(roomName: String, selectedMembers: List<ChatsterListViewModel>) {
+        val members = _members.value ?: return
+
+        val selectedIds = selectedMembers
+            .filter { it.isSelected || it._id == realmSync.currentUser()?.id }
+            .map { it._id }
+
+        val chatMembers = members.filter { selectedIds.contains(it._id) }
+
+        val conversion = Conversation().apply {
+            this.displayName = roomName
+            this.members = RealmList()
+            this.members.addAll(chatMembers.map {
+                Member(userName = it.userName)
+            })
+        }
+        updateConversionToUser(conversion)
+    }
+
+    private fun updateConversionToUser(conversation: Conversation) {
+        val user = realmSync.currentUser() ?: return
+        val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+
+        Realm.getInstanceAsync(config, object : Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                val userInfo = realm.where<User>().findFirst()
+                realm.beginTransaction()
+                userInfo?.apply {
+                    conversations.add(conversation)
+                }
+                realm.commitTransaction()
+                _navigation.value = CreateNewChatNavigation.GoToDashboard
+            }
+        })
+    }
 }
