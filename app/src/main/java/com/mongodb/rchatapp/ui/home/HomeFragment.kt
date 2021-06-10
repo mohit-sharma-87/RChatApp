@@ -12,6 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
+    private val TAG = "HomeFragment"
     private val homeViewModel: HomeViewModel by viewModel()
     private var _binding: FragmentChatRoomListBinding? = null
 
@@ -35,13 +36,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvChatList.apply {
+            adapter = ChatListAdapter()
+        }
+
         homeViewModel.isLoggedIn.observe(viewLifecycleOwner) {
             if (!it)
                 openLogin()
         }
 
         homeViewModel.chatList.observe(viewLifecycleOwner) {
-
+            val adapter = binding.rvChatList.adapter as ChatListAdapter
+            adapter.updateList(it)
         }
 
         binding.fabNewChat.setOnClickListener {
