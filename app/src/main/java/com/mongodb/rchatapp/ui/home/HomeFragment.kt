@@ -5,19 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.mongodb.rchatapp.R
-import com.mongodb.rchatapp.databinding.FragmentHomeBinding
+import com.mongodb.rchatapp.databinding.FragmentChatRoomListBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModel()
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentChatRoomListBinding? = null
 
     private val binding get() = _binding!!
 
@@ -32,7 +28,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentChatRoomListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
