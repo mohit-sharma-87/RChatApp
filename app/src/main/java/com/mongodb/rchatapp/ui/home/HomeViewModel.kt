@@ -17,15 +17,6 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
     }
     val text: LiveData<String> = _text
 
-    private val _currentUser = MutableLiveData<io.realm.mongodb.User>()
-
-    val isLoggedIn: LiveData<Boolean> = Transformations.map(_currentUser) {
-        it != null
-    }
-
-    private val _isProfileComplete: MutableLiveData<Boolean> = MutableLiveData()
-    val isProfileComplete: LiveData<Boolean> = _isProfileComplete
-
     private val _loadingBar: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingBar: LiveData<Boolean> = _loadingBar
 
@@ -39,7 +30,10 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onLoad() {
-        _currentUser.value = realmSync.currentUser()
+        if (realmSync.currentUser() == null) {
+            _navigation.value = HomeNavigation.GoToLogin
+            return
+        }
         checkProfileCompletion()
         getChatGroupList()
     }
@@ -51,7 +45,10 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 val userInfo = realm.where<User>().findFirst()
-                _isProfileComplete.value = userInfo?.userPreferences != null
+                if (userInfo?.userPreferences?.displayName.isNullOrBlank()) {
+                    _navigation.value = HomeNavigation.GoToProfile
+                }
+
             }
 
             override fun onError(exception: Throwable) {
@@ -65,23 +62,28 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
     private fun getChatGroupList() {
         val user = realmSync.currentUser() ?: return
         val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+        _loadingBar.value = true
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
-                val userInfo = realm.where<User>().findFirst()
+                val userInfo = realm.where<User>().findFirst()?.let {
+                    realm.copyFromRealm(it)
+                }
                 _chatList.value = userInfo?.conversations ?: emptyList()
+                _loadingBar.value = false
             }
 
             override fun onError(exception: Throwable) {
                 super.onError(exception)
                 _chatList.value = emptyList()
+                _loadingBar.value = false
             }
         })
     }
 
     fun onRoomClick(it: Conversation) {
         _navigation.value =
-            HomeNavigation.goToSelectedChatRoom(conversationId = it.id, roomName = it.displayName)
+            HomeNavigation.GoToSelectedRoom(conversationId = it.id, roomName = it.displayName)
     }
 
 }

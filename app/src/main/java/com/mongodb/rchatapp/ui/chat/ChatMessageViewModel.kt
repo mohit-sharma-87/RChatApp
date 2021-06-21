@@ -1,18 +1,14 @@
 package com.mongodb.rchatapp.ui.chat
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ChatMessage
-import io.realm.*
+import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
 import io.realm.mongodb.sync.SyncConfiguration
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import java.util.AbstractMap
 
 class ChatMessageViewModel(private val realmSync: App, private val conversationId: String) :
     ViewModel() {
@@ -68,12 +64,6 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
                         )
                     )
                 }
-
-                realm.executeTransaction {
-
-                }
-
-
             }
 
             override fun onError(exception: Throwable) {

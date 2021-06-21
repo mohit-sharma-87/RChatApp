@@ -118,8 +118,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), errorString, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

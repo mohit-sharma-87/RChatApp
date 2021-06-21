@@ -2,6 +2,7 @@ package com.mongodb.rchatapp.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,23 +44,27 @@ class HomeFragment : Fragment() {
             }
         }
 
-        homeViewModel.isLoggedIn.observe(viewLifecycleOwner) {
-            if (!it)
-                openLogin()
-        }
-
         homeViewModel.chatList.observe(viewLifecycleOwner) {
+            Log.i(TAG, "onViewCreated: ${it.size}")
             val adapter = binding.rvChatList.adapter as ChatListAdapter
             adapter.updateList(it)
         }
 
         homeViewModel.navigation.observe(viewLifecycleOwner) {
             when (it) {
-                is HomeNavigation.goToSelectedChatRoom -> {
-                    findNavController().navigate(HomeFragmentDirections.goToChatMessage(it.conversationId,it.roomName))
+                is HomeNavigation.GoToSelectedRoom -> {
+                    findNavController().navigate(
+                        HomeFragmentDirections.goToChatMessage(
+                            it.conversationId,
+                            it.roomName
+                        )
+                    )
                 }
-                else -> {
-                //TODO: implemenation pending
+                is HomeNavigation.GoToProfile -> {
+                    findNavController().navigate(HomeFragmentDirections.goToProfile())
+                }
+                is HomeNavigation.GoToLogin -> {
+                    findNavController().navigate(HomeFragmentDirections.goToLogin())
                 }
             }
         }
@@ -67,15 +72,14 @@ class HomeFragment : Fragment() {
         binding.fabNewChat.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.goToChatMemberList())
         }
+
+        homeViewModel.loadingBar.observe(viewLifecycleOwner) {
+            binding.loading.visibility = if (it) View.VISIBLE else View.GONE
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun openLogin() {
-        findNavController().navigate(HomeFragmentDirections.actionGoToHome())
-    }
-
 }

@@ -36,7 +36,7 @@ class ProfileFragment : Fragment() {
         viewModel.navigation.observe(viewLifecycleOwner) {
             when (it) {
                 ProfileNavigation.GoToHome -> {
-                    findNavController().navigate(R.id.go_to_home)
+                    findNavController().navigateUp()
                 }
             }
         }

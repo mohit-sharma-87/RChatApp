@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ProfileNavigation
 import com.mongodb.rchatapp.ui.data.User
+import com.mongodb.rchatapp.utils.SingleLiveEvent
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
@@ -14,15 +15,15 @@ import io.realm.mongodb.sync.SyncConfiguration
 
 class ProfileViewModel(private val realmApp: App) : ViewModel() {
 
-    private val _navigation: MutableLiveData<ProfileNavigation> = MutableLiveData()
-    val navigation: LiveData<ProfileNavigation> = _navigation
+    private val _navigation: SingleLiveEvent<ProfileNavigation> = SingleLiveEvent()
+    val navigation: SingleLiveEvent<ProfileNavigation> = _navigation
 
     private val _loadingBar: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingBar: LiveData<Boolean> = _loadingBar
 
     private val _user: MutableLiveData<User> = MutableLiveData()
     val userName: LiveData<String> = Transformations.map(_user) {
-        it.userPreferences?.displayName ?: ""
+        it?.userPreferences?.displayName ?: ""
     }
 
     init {

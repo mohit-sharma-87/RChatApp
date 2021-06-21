@@ -15,8 +15,10 @@ sealed class CreateNewChatNavigation {
 
 sealed class HomeNavigation {
 
-    object goToLogin : HomeNavigation()
-    object goToCreateNewRoom : HomeNavigation()
-    data class goToSelectedChatRoom(val conversationId: String, val roomName: String) : HomeNavigation()
+    data class GoToSelectedRoom(val conversationId: String, val roomName: String) :
+        HomeNavigation()
+
+    object GoToProfile : HomeNavigation()
+    object GoToLogin : HomeNavigation()
 }
 
