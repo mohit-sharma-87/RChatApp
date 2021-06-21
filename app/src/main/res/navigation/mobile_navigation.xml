@@ -18,6 +18,10 @@
         <action
             android:id="@+id/go_to_chatMemberList"
             app:destination="@id/chatMemberList" />
+
+        <action
+            android:id="@+id/go_to_chat_message"
+            app:destination="@id/chatMessageListFragment" />
     </fragment>
 
     <fragment
@@ -47,5 +51,20 @@
         android:name="com.mongodb.rchatapp.ui.chatmembers.ChatMemberListFragment"
         android:label="@string/title_new_chat"
         tools:layout="@layout/fragment_member_list" />
+
+    <fragment
+        android:id="@+id/chatMessageListFragment"
+        android:name="com.mongodb.rchatapp.ui.chat.ChatMessageListFragment"
+        android:label="{roomName}"
+        tools:layout="@layout/fragment_chat_message">
+
+        <argument
+            android:name="conversationId"
+            app:argType="string" />
+
+        <argument
+            android:name="roomName"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mongodb.rchatapp.databinding.FragmentChatRoomListBinding
+import com.mongodb.rchatapp.ui.data.HomeNavigation
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
@@ -37,7 +38,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvChatList.apply {
-            adapter = ChatListAdapter()
+            adapter = ChatListAdapter().addClickListener {
+                homeViewModel.onRoomClick(it)
+            }
         }
 
         homeViewModel.isLoggedIn.observe(viewLifecycleOwner) {
@@ -48,6 +51,17 @@ class HomeFragment : Fragment() {
         homeViewModel.chatList.observe(viewLifecycleOwner) {
             val adapter = binding.rvChatList.adapter as ChatListAdapter
             adapter.updateList(it)
+        }
+
+        homeViewModel.navigation.observe(viewLifecycleOwner) {
+            when (it) {
+                is HomeNavigation.goToSelectedChatRoom -> {
+                    findNavController().navigate(HomeFragmentDirections.goToChatMessage(it.conversationId,it.roomName))
+                }
+                else -> {
+                //TODO: implemenation pending
+                }
+            }
         }
 
         binding.fabNewChat.setOnClickListener {

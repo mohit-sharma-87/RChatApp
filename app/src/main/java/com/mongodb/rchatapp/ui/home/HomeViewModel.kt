@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.mongodb.rchatapp.ui.data.HomeNavigation
 import com.mongodb.rchatapp.ui.data.Conversation
 import com.mongodb.rchatapp.ui.data.User
+import com.mongodb.rchatapp.utils.SingleLiveEvent
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
@@ -32,8 +33,8 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
     private val _chatList: MutableLiveData<List<Conversation>> = MutableLiveData()
     val chatList: LiveData<List<Conversation>> = _chatList
 
-    private val _navigation: MutableLiveData<HomeNavigation> = MutableLiveData()
-    val navigation: LiveData<HomeNavigation> = _navigation
+    private val _navigation: SingleLiveEvent<HomeNavigation> = SingleLiveEvent()
+    val navigation: SingleLiveEvent<HomeNavigation> = _navigation
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -76,6 +77,11 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
                 _chatList.value = emptyList()
             }
         })
+    }
+
+    fun onRoomClick(it: Conversation) {
+        _navigation.value =
+            HomeNavigation.goToSelectedChatRoom(conversationId = it.id, roomName = it.displayName)
     }
 
 }

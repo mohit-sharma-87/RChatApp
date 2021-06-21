@@ -78,7 +78,7 @@ open class Photo(
 ) : RealmObject() {}
 
 open class ChatMessage(
-    @PrimaryKey var _id: String = "",
+    @PrimaryKey var _id: String = UUID.randomUUID().toString(),
     var author: String? = null,
     var image: Photo? = null,
     @Required

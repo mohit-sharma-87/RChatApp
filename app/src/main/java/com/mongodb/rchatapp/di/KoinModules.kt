@@ -1,6 +1,7 @@
 package com.mongodb.rchatapp.di
 
 import com.mongodb.rchatapp.RChatApplication
+import com.mongodb.rchatapp.ui.chat.ChatMessageViewModel
 import com.mongodb.rchatapp.ui.chatmembers.ChatMemberViewModel
 import com.mongodb.rchatapp.ui.home.HomeViewModel
 import com.mongodb.rchatapp.ui.login.LoginViewModel
@@ -14,4 +15,10 @@ fun koinModules() = module {
     viewModel { ProfileViewModel((androidApplication() as RChatApplication).realmSync) }
     viewModel { LoginViewModel((androidApplication() as RChatApplication).realmSync) }
     viewModel { ChatMemberViewModel((androidApplication() as RChatApplication).realmSync) }
+    viewModel { (conversationId: String) ->
+        ChatMessageViewModel(
+            (androidApplication() as RChatApplication).realmSync,
+            conversationId
+        )
+    }
 }

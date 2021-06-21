@@ -56,10 +56,9 @@ class LoginViewModel(private val realmSync: App) : ViewModel() {
         realmSync.emailPassword.registerUserAsync(username, password) {
             // re-enable the buttons after user registration returns a result
             if (it.isSuccess) {
-                realmSync.currentUser()
+                login(username, password)
             } else {
-                Log.i("LoginViewModel", "Successfully registered user.")
-                // when the account has been created successfully, log in to the account
+                Log.i("LoginViewModel", "registered user failed")
             }
         }
     }
