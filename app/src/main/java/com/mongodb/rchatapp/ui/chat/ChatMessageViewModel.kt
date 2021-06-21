@@ -83,38 +83,4 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
             }
         })
     }
-
-
-    open class Player : RealmObject() {
-        var name: String? = null
-        var email: String? = null
-        var playerHandle: String? = null
-        var gameplayStats: RealmDictionary<String> = RealmDictionary<String>()
-        var competitionStats: RealmDictionary<String> = RealmDictionary<String>()
-    }
-
-
-    fun sampleFunction() {
-        val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "conversation=${conversationId}").build()
-
-        // Insert
-        Realm.getInstanceAsync(config, object : Realm.Callback() {
-            override fun onSuccess(realm: Realm) {
-
-
-
-
-            }
-
-            override fun onError(exception: Throwable) {
-                super.onError(exception)
-                _loadingBar.value = false
-                //TODO : need to implement
-            }
-        })
-    }
-
-
-
 }
