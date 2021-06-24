@@ -2,13 +2,15 @@ package com.mongodb.rchatapp.ui.chat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mongodb.rchatapp.databinding.ItemChatMessageBinding
+import com.mongodb.rchatapp.ui.chatmembers.ChatMemberListDiffCallback
 import com.mongodb.rchatapp.ui.data.ChatMessage
 
 class ChatMessageAdapter : RecyclerView.Adapter<ChatMessageAdapter.ViewHolder>() {
 
-    val messages = mutableListOf<ChatMessage>()
+    private val messages = mutableListOf<ChatMessage>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -29,8 +31,17 @@ class ChatMessageAdapter : RecyclerView.Adapter<ChatMessageAdapter.ViewHolder>()
     }
 
     fun setData(it: List<ChatMessage>) {
+        val diffResult =
+            DiffUtil.calculateDiff(
+                ChatMessageListDiffCallback(
+                    oldList = messages.toList(),
+                    newList = it
+                )
+            )
+        diffResult.dispatchUpdatesTo(this)
+
+        messages.clear()
         messages.addAll(it)
-        notifyDataSetChanged()
     }
 
     inner class ViewHolder(val binding: ItemChatMessageBinding) :

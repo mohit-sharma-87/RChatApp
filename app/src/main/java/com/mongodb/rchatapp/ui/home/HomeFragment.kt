@@ -66,6 +66,9 @@ class HomeFragment : Fragment() {
                 is HomeNavigation.GoToLogin -> {
                     findNavController().navigate(HomeFragmentDirections.goToLogin())
                 }
+                else -> {
+                    Log.e(TAG, "onViewCreated: navigation $it", )
+                }
             }
         }
 

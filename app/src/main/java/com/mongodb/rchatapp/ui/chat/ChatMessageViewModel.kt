@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ChatMessage
 import io.realm.Realm
+import io.realm.RealmChangeListener
+import io.realm.RealmResults
 import io.realm.kotlin.where
 import io.realm.mongodb.App
 import io.realm.mongodb.sync.SyncConfiguration
@@ -20,6 +22,10 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
     private val _chatMessages: MutableLiveData<List<ChatMessage>> = MutableLiveData()
     val chatMessage: LiveData<List<ChatMessage>> = _chatMessages
 
+    private val _messagePostStatus: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val messagePostStatus: LiveData<Boolean> = _messagePostStatus
+
+
     init {
         getChatList()
     }
@@ -32,12 +38,12 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 _loadingBar.value = false
-                realm.addChangeListener {
-                    val messages = realm.where<ChatMessage>().findAll().sort("timestamp").map {
-                        it
-                    }
-                    _chatMessages.value = messages
-                }
+
+                val realmResults = realm.where<ChatMessage>().findAll().sort("timestamp")
+                realmResults.addChangeListener(RealmChangeListener<RealmResults<ChatMessage>> {
+                    _chatMessages.value = it.map { it }
+                })
+                _chatMessages.value = realmResults.map { it }
             }
 
             override fun onError(exception: Throwable) {
@@ -55,7 +61,7 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
-                realm.executeTransactionAsync {
+                realm.executeTransactionAsync({
                     it.insert(
                         ChatMessage(
                             text = message,
@@ -63,7 +69,11 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
                             author = "Mohit"
                         )
                     )
-                }
+                }, {
+                    _messagePostStatus.postValue(true)
+                }, {
+                    _messagePostStatus.postValue(false)
+                })
             }
 
             override fun onError(exception: Throwable) {
