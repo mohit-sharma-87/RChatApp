@@ -53,18 +53,22 @@ class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
     fun createChatRoom(roomName: String, selectedMembers: List<ChatsterListViewModel>) {
         val members = _members.value ?: return
 
+        val hostUser = selectedMembers.find { it._id == realmSync.currentUser()?.id }?.run {
+            Member(userName = this.userName, membershipStatus = "Membership active")
+        }
+
         val selectedIds = selectedMembers
             .filter { it.isSelected || it._id == realmSync.currentUser()?.id }
             .map { it._id }
 
         val chatMembers = members.filter { selectedIds.contains(it._id) }
-
         val conversion = Conversation().apply {
             this.displayName = roomName
             this.members = RealmList()
             this.members.addAll(chatMembers.map {
                 Member(userName = it.userName)
             })
+            this.members.add(hostUser)
         }
         updateConversionToUser(conversion)
     }
