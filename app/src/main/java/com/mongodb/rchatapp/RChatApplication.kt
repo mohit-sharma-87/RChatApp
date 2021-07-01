@@ -4,6 +4,8 @@ import android.app.Application
 import com.mongodb.rchatapp.di.koinModules
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.log.LogLevel
+import io.realm.log.RealmLog
 import io.realm.mongodb.App
 import io.realm.mongodb.AppConfiguration
 import org.koin.android.ext.koin.androidContext
@@ -33,6 +35,9 @@ class RChatApplication : Application() {
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(config)
+
+        if (BuildConfig.DEBUG)
+            RealmLog.setLevel(LogLevel.ALL)
     }
 
     private fun setupKoin() {
