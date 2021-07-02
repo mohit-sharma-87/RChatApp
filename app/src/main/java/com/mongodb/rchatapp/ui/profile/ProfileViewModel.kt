@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ProfileNavigation
 import com.mongodb.rchatapp.ui.data.User
 import com.mongodb.rchatapp.utils.SingleLiveEvent
+import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
@@ -46,7 +47,7 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
 
         val user = realmApp.currentUser() ?: return
         Log.e("updateDisplayName", "user=${user.id} ")
-        val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+        val config = realmApp.getSyncConfig(partition ="user=${user.id}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
@@ -66,7 +67,7 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
 
     private fun getProfileData() {
         val user = realmApp.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+        val config = realmApp.getSyncConfig(partition ="user=${user.id}")
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 val userInfo = realm.where<User>().findFirst()

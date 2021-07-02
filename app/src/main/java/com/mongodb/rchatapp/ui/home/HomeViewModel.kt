@@ -1,16 +1,20 @@
 package com.mongodb.rchatapp.ui.home
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.mongodb.rchatapp.ui.data.HomeNavigation
 import com.mongodb.rchatapp.ui.data.Conversation
 import com.mongodb.rchatapp.ui.data.User
 import com.mongodb.rchatapp.utils.SingleLiveEvent
+import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
 import io.realm.mongodb.sync.SyncConfiguration
 
 class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver {
+
+    private val TAG = "HomeViewModel"
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"
@@ -40,7 +44,7 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
 
     private fun checkProfileCompletion() {
         val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+        val config = realmSync.getSyncConfig(partition = "user=${user.id}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
@@ -54,6 +58,7 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
             override fun onError(exception: Throwable) {
                 super.onError(exception)
                 //TODO : need to implement
+                Log.e(TAG, "onError: ${exception.printStackTrace()}")
             }
         })
 
@@ -61,7 +66,7 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
 
     private fun getChatGroupList() {
         val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+        val config = realmSync.getSyncConfig("user=${user.id}")
         _loadingBar.value = true
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
@@ -69,6 +74,9 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
                 val userInfo = realm.where<User>().findFirst()?.let {
                     realm.copyFromRealm(it)
                 }
+
+                Log.e(TAG, "getChatGroupList - onSuccess: ${userInfo?.conversations?.size}")
+
                 _chatList.value = userInfo?.conversations ?: emptyList()
                 _loadingBar.value = false
             }
@@ -77,6 +85,7 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
                 super.onError(exception)
                 _chatList.value = emptyList()
                 _loadingBar.value = false
+                //TODO : need to implement
             }
         })
     }

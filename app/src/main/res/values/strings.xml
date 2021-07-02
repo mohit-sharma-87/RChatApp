@@ -23,5 +23,6 @@
 
     <string name="prompt_chat_room">Enter Chat Room Name</string>
     <string name="label_member">Select Chat Members </string>
+    <string name="no_chat_room_for_now_n_let_s_one_now">No Chat Room.\n Let\'s create one now</string>
 
 </resources>

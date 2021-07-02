@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ChatMessage
+import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmResults
@@ -33,7 +34,7 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
     private fun getChatList() {
         _loadingBar.value = true
         val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "conversation=${conversationId}").build()
+        val config = realmSync.getSyncConfig(partition = "conversation=${conversationId}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
@@ -57,7 +58,7 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
     fun sendChatMessage(message: String) {
 
         val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "conversation=${conversationId}").build()
+        val config = realmSync.getSyncConfig(partition ="conversation=${conversationId}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {

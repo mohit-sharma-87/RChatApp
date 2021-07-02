@@ -38,4 +38,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/rv_chat_list" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_empty_screen"
+        android:layout_width="0dp"
+        android:text="@string/no_chat_room_for_now_n_let_s_one_now"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/fab_new_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

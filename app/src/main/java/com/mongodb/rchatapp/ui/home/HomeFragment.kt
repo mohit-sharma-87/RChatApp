@@ -1,6 +1,7 @@
 package com.mongodb.rchatapp.ui.home
 
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,7 +46,12 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.chatList.observe(viewLifecycleOwner) {
-            Log.i(TAG, "onViewCreated: ${it.size}")
+
+            if (it.isEmpty()) {
+                showEmptyScreen()
+            } else
+                hideEmptyScreen()
+
             val adapter = binding.rvChatList.adapter as ChatListAdapter
             adapter.updateList(it)
         }
@@ -67,7 +73,7 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(HomeFragmentDirections.goToLogin())
                 }
                 else -> {
-                    Log.e(TAG, "onViewCreated: navigation $it", )
+                    Log.e(TAG, "onViewCreated: navigation $it")
                 }
             }
         }
@@ -84,5 +90,13 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun hideEmptyScreen() {
+        binding.tvEmptyScreen.visibility = View.GONE
+    }
+
+    private fun showEmptyScreen() {
+        binding.tvEmptyScreen.visibility = View.VISIBLE
     }
 }

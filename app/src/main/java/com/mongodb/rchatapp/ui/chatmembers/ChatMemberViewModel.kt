@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.CreateNewChatNavigation
 import com.mongodb.rchatapp.ui.data.*
+import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
@@ -32,7 +33,7 @@ class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
     private fun getMemberList() {
         _loadingBar.value = true
         val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "all-users=all-the-users").build()
+        val config = realmSync.getSyncConfig(partition ="all-users=all-the-users")
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 _loadingBar.value = false
@@ -75,7 +76,7 @@ class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
 
     private fun updateConversionToUser(conversation: Conversation) {
         val user = realmSync.currentUser() ?: return
-        val config = SyncConfiguration.Builder(user, "user=${user.id}").build()
+        val config = realmSync.getSyncConfig(partition ="user=${user.id}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
