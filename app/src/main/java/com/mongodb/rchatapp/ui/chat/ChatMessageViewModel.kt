@@ -15,7 +15,7 @@ import io.realm.mongodb.App
 class ChatMessageViewModel(
     private val realmSync: App,
     private val conversationId: String,
-    private val userName: String
+    private val currentUserName: String
 ) :
     ViewModel() {
 
@@ -66,7 +66,7 @@ class ChatMessageViewModel(
                         ChatMessage(
                             text = message,
                             partition = "conversation=${conversationId}",
-                            author = userName
+                            author = currentUserName
                         )
                     )
                 }, {
