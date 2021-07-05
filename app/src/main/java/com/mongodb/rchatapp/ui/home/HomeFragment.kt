@@ -62,7 +62,8 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(
                         HomeFragmentDirections.goToChatMessage(
                             it.conversationId,
-                            it.roomName
+                            it.roomName,
+                            it.currentUsername
                         )
                     )
                 }

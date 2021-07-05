@@ -15,10 +15,11 @@ fun koinModules() = module {
     viewModel { ProfileViewModel((androidApplication() as RChatApplication).realmSync) }
     viewModel { LoginViewModel((androidApplication() as RChatApplication).realmSync) }
     viewModel { ChatMemberViewModel((androidApplication() as RChatApplication).realmSync) }
-    viewModel { (conversationId: String) ->
+    viewModel { (conversationId: String, currentUserName: String) ->
         ChatMessageViewModel(
             (androidApplication() as RChatApplication).realmSync,
-            conversationId
+            conversationId,
+            currentUserName
         )
     }
 }

@@ -16,9 +16,14 @@ import org.koin.core.parameter.parametersOf
 
 class ChatMessageListFragment : Fragment() {
 
-    val args: ChatMessageListFragmentArgs by navArgs()
+    private val args: ChatMessageListFragmentArgs by navArgs()
     lateinit var binding: FragmentChatMessageBinding
-    private val viewModel: ChatMessageViewModel by viewModel { parametersOf(args.conversationId) }
+    private val viewModel: ChatMessageViewModel by viewModel {
+        parametersOf(
+            args.conversationId,
+            args.currentUserName
+        )
+    }
 
 
     override fun onCreateView(

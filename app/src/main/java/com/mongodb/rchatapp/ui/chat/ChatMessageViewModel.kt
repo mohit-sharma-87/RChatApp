@@ -11,14 +11,16 @@ import io.realm.RealmChangeListener
 import io.realm.RealmResults
 import io.realm.kotlin.where
 import io.realm.mongodb.App
-import io.realm.mongodb.sync.SyncConfiguration
 
-class ChatMessageViewModel(private val realmSync: App, private val conversationId: String) :
+class ChatMessageViewModel(
+    private val realmSync: App,
+    private val conversationId: String,
+    private val userName: String
+) :
     ViewModel() {
 
     private val _loadingBar: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingBar: LiveData<Boolean> = _loadingBar
-
 
     private val _chatMessages: MutableLiveData<List<ChatMessage>> = MutableLiveData()
     val chatMessage: LiveData<List<ChatMessage>> = _chatMessages
@@ -33,7 +35,6 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
 
     private fun getChatList() {
         _loadingBar.value = true
-        val user = realmSync.currentUser() ?: return
         val config = realmSync.getSyncConfig(partition = "conversation=${conversationId}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
@@ -56,9 +57,7 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
     }
 
     fun sendChatMessage(message: String) {
-
-        val user = realmSync.currentUser() ?: return
-        val config = realmSync.getSyncConfig(partition ="conversation=${conversationId}")
+        val config = realmSync.getSyncConfig(partition = "conversation=${conversationId}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
@@ -67,7 +66,7 @@ class ChatMessageViewModel(private val realmSync: App, private val conversationI
                         ChatMessage(
                             text = message,
                             partition = "conversation=${conversationId}",
-                            author = "Mohit"
+                            author = userName
                         )
                     )
                 }, {

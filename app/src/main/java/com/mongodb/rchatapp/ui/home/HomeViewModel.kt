@@ -10,7 +10,6 @@ import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
-import io.realm.mongodb.sync.SyncConfiguration
 
 class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver {
 
@@ -31,6 +30,8 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
     private val _navigation: SingleLiveEvent<HomeNavigation> = SingleLiveEvent()
     val navigation: SingleLiveEvent<HomeNavigation> = _navigation
 
+    private val _currentUser: MutableLiveData<User> = MutableLiveData()
+    val userName: MutableLiveData<String> = MutableLiveData()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onLoad() {
@@ -38,7 +39,6 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
             _navigation.value = HomeNavigation.GoToLogin
             return
         }
-        checkProfileCompletion()
         getChatGroupList()
     }
 
@@ -72,11 +72,13 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 val userInfo = realm.where<User>().findFirst()?.let {
+                    _currentUser.value = it
+                    checkProfileCompleteStatus(it)
+                    updateCurrentUserName(it)
                     realm.copyFromRealm(it)
                 }
 
                 Log.e(TAG, "getChatGroupList - onSuccess: ${userInfo?.conversations?.size}")
-
                 _chatList.value = userInfo?.conversations ?: emptyList()
                 _loadingBar.value = false
             }
@@ -91,8 +93,24 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
     }
 
     fun onRoomClick(it: Conversation) {
+        val currentUsername = userName.value ?: return
         _navigation.value =
-            HomeNavigation.GoToSelectedRoom(conversationId = it.id, roomName = it.displayName)
+            HomeNavigation.GoToSelectedRoom(
+                conversationId = it.id,
+                roomName = it.displayName,
+                currentUsername = currentUsername
+            )
     }
+
+    private fun updateCurrentUserName(user: User) {
+        userName.value = user.userPreferences?.displayName ?: user.userName
+    }
+
+    private fun checkProfileCompleteStatus(userInfo: User) {
+        if (userInfo.userPreferences?.displayName.isNullOrBlank()) {
+            _navigation.value = HomeNavigation.GoToProfile
+        }
+    }
+
 
 }
