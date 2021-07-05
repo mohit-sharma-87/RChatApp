@@ -8,6 +8,8 @@
         <variable
             name="item"
             type="com.mongodb.rchatapp.ui.data.Conversation" />
+
+        <import type="android.view.View" />
     </data>
 
 
@@ -59,6 +61,8 @@
             android:id="@+id/tv_chat_unread_count"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{String.valueOf(item.unreadCount)}"
+            android:visibility="@{item.unreadCount > 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_chat_last_msg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_chat_last_msg"
