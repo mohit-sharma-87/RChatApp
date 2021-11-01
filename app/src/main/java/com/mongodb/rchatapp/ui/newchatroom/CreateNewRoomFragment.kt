@@ -1,4 +1,4 @@
-package com.mongodb.rchatapp.ui.chatmembers
+package com.mongodb.rchatapp.ui.newchatroom
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,23 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.mongodb.rchatapp.databinding.FragmentMemberListBinding
+import com.mongodb.rchatapp.databinding.FragmentChatNewRoomBinding
 import com.mongodb.rchatapp.ui.data.CreateNewChatNavigation
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A fragment representing a list of Items.
  */
-class ChatMemberListFragment : Fragment() {
+class CreateNewRoomFragment : Fragment() {
 
     private val viewModel: ChatMemberViewModel by viewModel()
-    private lateinit var binding: FragmentMemberListBinding
+    private lateinit var binding: FragmentChatNewRoomBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMemberListBinding.inflate(inflater, container, false)
+        binding = FragmentChatNewRoomBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,7 +30,7 @@ class ChatMemberListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvMemberList.apply {
-            adapter = ChatMemberViewAdapter()
+            adapter = ChatMemberListAdapter()
         }
 
         viewModel.loadingBar.observe(viewLifecycleOwner) {
@@ -38,16 +38,19 @@ class ChatMemberListFragment : Fragment() {
         }
 
         viewModel.members.observe(viewLifecycleOwner) {
-            val adapter = binding.rvMemberList.adapter as ChatMemberViewAdapter
+            val adapter = binding.rvMemberList.adapter as ChatMemberListAdapter
             adapter.updateMemberList(it)
         }
 
         binding.fabAddRoom.setOnClickListener {
-            val adapter = binding.rvMemberList.adapter as ChatMemberViewAdapter
-            viewModel.createChatRoom(
-                roomName = binding.etRoomName.text.toString(),
-                selectedMembers = adapter.values.toList()
-            )
+            val adapter = binding.rvMemberList.adapter as ChatMemberListAdapter
+
+            if (adapter.values.isNotEmpty()) {
+                viewModel.createChatRoom(
+                    roomName = binding.etRoomName.text.toString(),
+                    selectedMembers = adapter.values.toList()
+                )
+            }
         }
 
         viewModel.navigation.observe(viewLifecycleOwner) {

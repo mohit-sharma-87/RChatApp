@@ -1,15 +1,18 @@
-package com.mongodb.rchatapp.ui.chatmembers
+package com.mongodb.rchatapp.ui.newchatroom
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.mongodb.rchatapp.R
 import com.mongodb.rchatapp.databinding.ItemMemberBinding
 import com.mongodb.rchatapp.ui.data.ChatsterListViewModel
 import java.util.ArrayList
 
-class ChatMemberViewAdapter : RecyclerView.Adapter<ChatMemberViewAdapter.ViewHolder>() {
+class ChatMemberListAdapter : RecyclerView.Adapter<ChatMemberListAdapter.ViewHolder>() {
 
     var values: MutableList<ChatsterListViewModel> = ArrayList()
 
@@ -32,6 +35,13 @@ class ChatMemberViewAdapter : RecyclerView.Adapter<ChatMemberViewAdapter.ViewHol
             item.displayName
         }
         updateSelectedState(holder.binding.ivCheck, item.isSelected)
+
+        Glide
+            .with(holder.binding.icMemberIcon)
+            .load(item.avatarImage?.picture)
+            .placeholder(R.drawable.ic_baseline_group_chat)
+            .circleCrop()
+            .into(holder.binding.icMemberIcon)
 
         holder.binding.root.apply {
             setOnClickListener {

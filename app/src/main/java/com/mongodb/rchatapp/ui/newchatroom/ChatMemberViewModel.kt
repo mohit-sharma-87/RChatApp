@@ -1,9 +1,6 @@
-package com.mongodb.rchatapp.ui.chatmembers
+package com.mongodb.rchatapp.ui.newchatroom
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.mongodb.rchatapp.ui.data.CreateNewChatNavigation
 import com.mongodb.rchatapp.ui.data.*
 import com.mongodb.rchatapp.utils.getSyncConfig
@@ -11,7 +8,6 @@ import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
 import io.realm.mongodb.App
-import io.realm.mongodb.sync.SyncConfiguration
 
 class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
 

@@ -1,4 +1,4 @@
-package com.mongodb.rchatapp.ui.chatmembers
+package com.mongodb.rchatapp.ui.newchatroom
 
 import androidx.recyclerview.widget.DiffUtil
 import com.mongodb.rchatapp.ui.data.ChatsterListViewModel
