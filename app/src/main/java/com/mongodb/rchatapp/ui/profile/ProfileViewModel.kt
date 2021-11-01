@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.mongodb.rchatapp.ui.data.Photo
 import com.mongodb.rchatapp.ui.data.ProfileNavigation
 import com.mongodb.rchatapp.ui.data.User
 import com.mongodb.rchatapp.utils.SingleLiveEvent
@@ -12,7 +13,6 @@ import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.App
-import io.realm.mongodb.sync.SyncConfiguration
 
 class ProfileViewModel(private val realmApp: App) : ViewModel() {
 
@@ -25,6 +25,10 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
     private val _user: MutableLiveData<User> = MutableLiveData()
     val userName: LiveData<String> = Transformations.map(_user) {
         it?.userPreferences?.displayName ?: ""
+    }
+
+    val userImage: LiveData<ByteArray?> = Transformations.map(_user) {
+        it?.userPreferences?.avatarImage?.picture
     }
 
     init {
@@ -47,7 +51,7 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
 
         val user = realmApp.currentUser() ?: return
         Log.e("updateDisplayName", "user=${user.id} ")
-        val config = realmApp.getSyncConfig(partition ="user=${user.id}")
+        val config = realmApp.getSyncConfig(partition = "user=${user.id}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
@@ -65,9 +69,32 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
         })
     }
 
+
+    fun updateImage(userImage: ByteArray) {
+
+        val user = realmApp.currentUser() ?: return
+        Log.e("updateDisplayName", "user=${user.id} ")
+        val config = realmApp.getSyncConfig(partition = "user=${user.id}")
+
+        Realm.getInstanceAsync(config, object : Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                val userInfo = realm.where<User>().findFirst()
+                Log.e("updateDisplayName", "onSuccess: ${realm.where<User>().count()}")
+                realm.beginTransaction()
+                userInfo?.apply {
+                    userPreferences?.apply {
+                        avatarImage = Photo(picture = userImage)
+                    }
+                }
+                realm.commitTransaction()
+                _navigation.value = ProfileNavigation.GoToHome
+            }
+        })
+    }
+
     private fun getProfileData() {
         val user = realmApp.currentUser() ?: return
-        val config = realmApp.getSyncConfig(partition ="user=${user.id}")
+        val config = realmApp.getSyncConfig(partition = "user=${user.id}")
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
                 val userInfo = realm.where<User>().findFirst()
