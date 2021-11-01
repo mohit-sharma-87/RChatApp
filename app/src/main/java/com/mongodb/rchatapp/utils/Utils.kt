@@ -18,6 +18,15 @@ fun View.hideKeyboard() {
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+
 fun App.getSyncConfig(partition: String): SyncConfiguration {
     return SyncConfiguration.Builder(currentUser(), partition).waitForInitialRemoteData().build()
 }
