@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mongodb.rchatapp.ui.data.ChatMessage
+import com.mongodb.rchatapp.ui.data.Conversation
+import com.mongodb.rchatapp.ui.data.User
 import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
 import io.realm.RealmChangeListener
@@ -28,9 +30,12 @@ class ChatMessageViewModel(
     private val _messagePostStatus: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val messagePostStatus: LiveData<Boolean> = _messagePostStatus
 
+    private val _conversation: MutableLiveData<Conversation> = MutableLiveData()
+    val conversation: LiveData<Conversation> = _conversation
 
     init {
         getChatList()
+        getConversionInfo()
     }
 
     private fun getChatList() {
@@ -82,5 +87,25 @@ class ChatMessageViewModel(
                 //TODO : need to implement
             }
         })
+    }
+
+    private fun getConversionInfo() {
+        val user = realmSync.currentUser() ?: return
+        val config = realmSync.getSyncConfig("user=${user.id}")
+
+        Realm.getInstanceAsync(config, object : Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                val conversation = realm.where<User>().equalTo("_id", user.id).findFirst()?.let {
+                    it.conversations.find { it.id == conversationId }
+                }
+                _conversation.value = conversation!!
+            }
+
+            override fun onError(exception: Throwable) {
+                super.onError(exception)
+            }
+        })
+
+
     }
 }

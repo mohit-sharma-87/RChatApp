@@ -7,6 +7,18 @@
     android:background="@color/shade_grey">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_chat_members"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/s_48"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_chat_member" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_chat_message"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -15,10 +27,9 @@
         app:layout_constraintBottom_toTopOf="@id/card_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="100"
+        app:layout_constraintTop_toBottomOf="@id/rv_chat_members"
+        tools:itemCount="10"
         tools:listitem="@layout/item_chat_message" />
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
@@ -62,5 +73,14 @@
 
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_chat_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

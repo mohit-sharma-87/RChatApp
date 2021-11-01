@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chip"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/s_4"
+    android:layout_marginEnd="@dimen/s_4"
+    app:chipIcon="@drawable/ic_home_black_24dp"
+    app:chipIconSize="@dimen/s_24"
+    app:iconEndPadding="@dimen/s_4"
+    app:iconStartPadding="@dimen/s_4"
+    tools:text="@tools:sample/full_names" />

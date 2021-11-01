@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mongodb.rchatapp.databinding.ItemChatMessageBinding
-import com.mongodb.rchatapp.ui.chatmembers.ChatMemberListDiffCallback
 import com.mongodb.rchatapp.ui.data.ChatMessage
 
 class ChatMessageAdapter : RecyclerView.Adapter<ChatMessageAdapter.ViewHolder>() {

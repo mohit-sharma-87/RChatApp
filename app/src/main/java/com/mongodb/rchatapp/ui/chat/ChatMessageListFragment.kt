@@ -10,7 +10,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mongodb.rchatapp.databinding.FragmentChatMessageBinding
 import com.mongodb.rchatapp.utils.clear
+import com.mongodb.rchatapp.utils.gone
 import com.mongodb.rchatapp.utils.hideKeyboard
+import com.mongodb.rchatapp.utils.visible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -46,6 +48,10 @@ class ChatMessageListFragment : Fragment() {
             adapter = ChatMessageAdapter()
         }
 
+        binding.rvChatMembers.apply {
+            adapter = ChatMemberAdapter()
+        }
+
         viewModel.chatMessage.observe(viewLifecycleOwner) {
             val adapter = binding.rvChatMessage.adapter as ChatMessageAdapter
             adapter.setData(it)
@@ -62,6 +68,18 @@ class ChatMessageListFragment : Fragment() {
             } else
                 Toast.makeText(requireContext(), "Couldn't send message", Toast.LENGTH_SHORT).show()
         }
+
+        viewModel.loadingBar.observe(viewLifecycleOwner) {
+            if (it)
+                binding.loading.visible()
+            else
+                binding.loading.gone()
+        }
+
+        viewModel.conversation.observe(viewLifecycleOwner) {
+            (binding.rvChatMembers.adapter as ChatMemberAdapter).setMemberList(it.members)
+        }
+
     }
 
 
