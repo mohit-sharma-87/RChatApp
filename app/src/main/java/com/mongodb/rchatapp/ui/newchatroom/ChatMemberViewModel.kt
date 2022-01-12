@@ -55,7 +55,8 @@ class ChatMemberViewModel(private val realmSync: App) : ViewModel() {
         }
 
         val selectedIds = selectedMembers
-            .filter { it.isSelected || it._id != realmSync.currentUser()?.id }
+            .filter { it.isSelected }
+            .filter { it._id != realmSync.currentUser()?.id  }
             .map { it._id }
 
         val chatMembers = members.filter { selectedIds.contains(it._id) }
