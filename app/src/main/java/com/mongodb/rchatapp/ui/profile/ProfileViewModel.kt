@@ -83,7 +83,7 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
                 realm.beginTransaction()
                 userInfo?.apply {
                     userPreferences?.apply {
-                        avatarImage = Photo(picture = userImage)
+                        avatarImage = Photo(picture = userImage, thumbNail = userImage)
                     }
                 }
                 realm.commitTransaction()
