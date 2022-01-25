@@ -103,4 +103,20 @@ class ProfileViewModel(private val realmApp: App) : ViewModel() {
         })
     }
 
+    fun updateUserStatusToOffline() {
+        val user = realmApp.currentUser() ?: return
+        val config = realmApp.getSyncConfig("user=${user.id}")
+
+        Realm.getInstanceAsync(config, object : Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                realm.executeTransactionAsync {
+                    val userInfo = it.where<User>().equalTo("_id", user.id).findFirst()
+                    userInfo?.apply {
+                        this.presence = "Off-Line"
+                    }
+                }
+            }
+        })
+    }
+
 }

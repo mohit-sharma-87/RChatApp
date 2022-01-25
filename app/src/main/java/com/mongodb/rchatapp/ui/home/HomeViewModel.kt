@@ -38,6 +38,8 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
         if (realmSync.currentUser() == null) {
             _navigation.value = HomeNavigation.GoToLogin
             return
+        } else {
+            updateUserStatusToOnline()
         }
         getChatGroupList()
     }
@@ -113,4 +115,19 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
         })
     }
 
+    private fun updateUserStatusToOnline() {
+        val user = realmSync.currentUser() ?: return
+        val config = realmSync.getSyncConfig("user=${user.id}")
+
+        Realm.getInstanceAsync(config, object : Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                realm.executeTransactionAsync {
+                    val userInfo = it.where<User>().equalTo("_id", user.id).findFirst()
+                    userInfo?.apply {
+                        this.presence = "On-Line"
+                    }
+                }
+            }
+        })
+    }
 }
