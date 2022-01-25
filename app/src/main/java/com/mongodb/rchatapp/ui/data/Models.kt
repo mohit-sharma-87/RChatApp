@@ -72,6 +72,7 @@ open class UserPreferences(
 
 @RealmClass(embedded = true)
 open class Photo(
+    var _id: String = UUID.randomUUID().toString(),
     var date: Date = Date(),
     var picture: ByteArray? = null,
     var thumbNail: ByteArray? = null
