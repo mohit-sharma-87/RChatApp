@@ -33,50 +33,44 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/s_8"
             android:text="@{item.displayName}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/ic_member_icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Chat Title" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_chat_last_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_chat_title"
-            tools:text="4:32 PM" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_chat_last_msg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/s_8"
-            android:layout_marginEnd="@dimen/s_8"
-            app:layout_constraintBottom_toBottomOf="@+id/ic_member_icon"
-            app:layout_constraintEnd_toStartOf="@id/tv_chat_unread_count"
-            app:layout_constraintStart_toEndOf="@id/ic_member_icon"
-            app:layout_constraintTop_toBottomOf="@+id/tv_chat_title"
-            tools:text="Chat Message" />
-
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_chat_unread_count"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.unreadCount)}"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:visibility="@{item.unreadCount > 0 ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_chat_last_msg"
+            app:cardBackgroundColor="#00B0FF"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_chat_last_msg"
-            tools:text="10" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@{String.valueOf(item.unreadCount)}"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                tools:text="10" />
+        </com.google.android.material.card.MaterialCardView>
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/s_8"
-            android:layout_marginTop="@dimen/s_8"
             android:background="@color/shade_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ic_member_icon"
-            app:layout_constraintTop_toBottomOf="@id/tv_chat_last_msg" />
+            app:layout_constraintTop_toBottomOf="@+id/ic_member_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
