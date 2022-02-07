@@ -35,7 +35,7 @@ class ChatMessageViewModel(
 
     init {
         getChatList()
-        getConversionInfo()
+        getChatMembers()
     }
 
     private fun getChatList() {
@@ -49,6 +49,7 @@ class ChatMessageViewModel(
                 val realmResults = realm.where<ChatMessage>().findAll().sort("timestamp")
                 realmResults.addChangeListener(RealmChangeListener<RealmResults<ChatMessage>> {
                     _chatMessages.value = it.map { it }
+                    updateMessageCount(conversationId)
                 })
                 _chatMessages.value = realmResults.map { it }
             }
@@ -89,13 +90,13 @@ class ChatMessageViewModel(
         })
     }
 
-    private fun getConversionInfo() {
+    private fun getChatMembers() {
         val user = realmSync.currentUser() ?: return
         val config = realmSync.getSyncConfig("user=${user.id}")
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
-                val conversation = realm.where<User>().equalTo("_id", user.id).findFirst()?.let {
+                val conversation = realm.where<User>().findFirst()?.let {
                     it.conversations.find { it.id == conversationId }
                 }
                 _conversation.value = conversation!!
@@ -105,7 +106,29 @@ class ChatMessageViewModel(
                 super.onError(exception)
             }
         })
+    }
+
+    private fun updateMessageCount(conversationId: String) {
+        val user = realmSync.currentUser() ?: return
+        val config = realmSync.getSyncConfig("user=${user.id}")
+
+        Realm.getInstanceAsync(config, object : Realm.Callback() {
+            override fun onSuccess(realm: Realm) {
+                realm.executeTransactionAsync {
+                    val userInfo = it.where<User>().findFirst()
+                    userInfo?.apply {
+                        this.conversations.find { it.id == conversationId }?.let {
+                            it.unreadCount = 0
+                        }
+                    }
+                }
+            }
 
 
+            override fun onError(exception: Throwable) {
+                super.onError(exception)
+                //TODO:
+            }
+        })
     }
 }

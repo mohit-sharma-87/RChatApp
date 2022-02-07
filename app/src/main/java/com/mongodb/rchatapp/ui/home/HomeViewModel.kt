@@ -1,6 +1,5 @@
 package com.mongodb.rchatapp.ui.home
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.mongodb.rchatapp.ui.data.Conversation
 import com.mongodb.rchatapp.ui.data.HomeNavigation
@@ -8,6 +7,8 @@ import com.mongodb.rchatapp.ui.data.User
 import com.mongodb.rchatapp.utils.SingleLiveEvent
 import com.mongodb.rchatapp.utils.getSyncConfig
 import io.realm.Realm
+import io.realm.RealmChangeListener
+import io.realm.RealmResults
 import io.realm.kotlin.where
 import io.realm.mongodb.App
 
@@ -39,27 +40,35 @@ class HomeViewModel(private val realmSync: App) : ViewModel(), LifecycleObserver
             _navigation.value = HomeNavigation.GoToLogin
             return
         } else {
+            getChatList()
             updateUserStatusToOnline()
         }
-        getChatGroupList()
     }
 
-    private fun getChatGroupList() {
+    private fun getChatList() {
         val user = realmSync.currentUser() ?: return
         val config = realmSync.getSyncConfig("user=${user.id}")
         _loadingBar.value = true
 
         Realm.getInstanceAsync(config, object : Realm.Callback() {
             override fun onSuccess(realm: Realm) {
-                val userInfo = realm.where<User>().findFirst()?.let {
+                val result = realm.where<User>().equalTo("_id", user.id).findAll()
+                result.addChangeListener(RealmChangeListener<RealmResults<User>> {
+                    it.first()?.let {
+                        realm.copyFromRealm(it).apply {
+                            _chatList.value = this?.conversations ?: emptyList()
+                        }
+                    }
+                })
+
+                val currentUser = result.first()?.let {
                     _currentUser.value = it
                     checkProfileCompleteStatus(it)
                     updateCurrentUserName(it)
                     realm.copyFromRealm(it)
                 }
 
-                Log.e(TAG, "getChatGroupList - onSuccess: ${userInfo?.conversations?.size}")
-                _chatList.value = userInfo?.conversations ?: emptyList()
+                _chatList.value = currentUser?.conversations ?: emptyList()
                 _loadingBar.value = false
             }
 
